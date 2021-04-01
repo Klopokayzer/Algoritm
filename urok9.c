@@ -15,69 +15,100 @@ typedef struct {
 	int dat;
 } Node;
 
-Node* arr[SZ];
-int head;
-int tail;
-int items;
+typedef struct {
+	Node* arr[SZ];
+	int tail;
+	int items;
+} PriorQueue;
 
-void pritnQ(){
-	printf("[ ");
-	for(int i = 0; i < SZ; ++i){
-		if (arr[i]==NULL)
-			printf("[*, *] ");
-		else
-			printf("[%d, %d] ", arr[i]->pr, arr[i]->dat);
-	}
-	printf(" ]\n");
+bool queueIsEmpty(PriorQueue* Queue){
+    return Queue && Queue->items == 0;
 }
 
-void init(){
-	for(int i = 0; i < SZ; ++i){
-		arr[i] = NULL;
-	}
-	head = 0;
-	tail = 0;
-	items = 0;
+bool queueIsFull(PriorQueue* Queue){
+    return Queue && Queue->items == SZ;
 }
 
-void ins(int pr, int dat){
-	Node *node = (Node*) malloc(sizeof(Node));
-	node->dat = dat;
-	node->pr = pr;
-	if (items == 0){
-		arr[tail++] = node;
-		items++;
-	} else if (items == SZ){
-		printf("%s \n", "Queue is full");
-		return;
-	} else {
-		arr[tail++] = node;
-		items++;
-	}
+void printNode(Node* NodeToPrint){
+    if (NodeToPrint == NULL)
+        printf("[*, *] ");
+    else
+        printf("[%d, %d] ", NodeToPrint->pr, NodeToPrint->dat);
 }
 
-/*Node* rem(){
-	if (items == 0) {
-		return NULL;
-	} else {
-		int flag;
-		for(int i = 0; i < SZ; i++){
-			if(flag < arr[i]->pr){
-				flag = arr[i]->pr;
-			}
-		}
-		for(int i = 0; i < SZ; i++){
-			if (flag >= arr[i]->pr){
-				Node *tmp = arr[i];
-				arr[i] = NULL;
-				items--;
-				return tmp;
-			}
-		}
-	}
-}
-*/
+void pritnQ(PriorQueue* Queue){
+	if (Queue == NULL)
+        printf("%s \n", "Queue is NULL!");
 
+    printf("[ ");
+
+    for (int i = 0; i < Queue->tail; ++i)
+        printNode(Queue->arr[i]);    
+    
+    printf(" ]\n");
+}
+
+void init(PriorQueue* Queue){
+	if (Queue == NULL){
+        printf("%s \n", "Queue is NULL!");
+        return;    
+    }
+	Queue->tail = 0;
+    Queue->items = 0;
+    for (int i = 0; i < SZ; ++i) {
+        Queue->arr[i] = NULL;
+    }
+}
+
+void ins(PriorQueue* Queue, int pr, int dat){
+	if (Queue == NULL){
+        printf("%s \n", "Queue is NULL!");
+        return;    
+    }
+
+    if (queueIsFull(Queue)){
+        printf("%s \n", "Queue is full!");
+        return;    
+    }
+    
+    Node *node = (Node*) malloc(sizeof(Node));
+    node->pr = pr;
+    node->dat = dat;
+    Queue->arr[Queue->tail] = node;
+    Queue->tail++;
+    Queue->items++;
+}
+
+Node* removeFromQueue(PriorQueue* Queue){
+    if (Queue == NULL){
+        printf("%s \n", "Queue is NULL!");
+        return NULL;
+    }
+
+    if (queueIsEmpty(Queue)) {
+        printf("%s \n", "Queue is empty!");
+        return NULL;
+    }
+    int maxPriority = Queue->arr[0]->pr;
+    int idxOfMaxPriorityElement = 0;
+    for (int i = 1; i < Queue->items; ++i) {
+        if (Queue->arr[i]->pr > maxPriority) {
+            maxPriority = Queue->arr[i]->pr;
+            idxOfMaxPriorityElement = i;
+        }
+    }
+    Node *tmp = Queue->arr[idxOfMaxPriorityElement];
+    while (idxOfMaxPriorityElement < Queue->items) {
+        Queue->arr[idxOfMaxPriorityElement] = Queue->arr[idxOfMaxPriorityElement + 1];
+        idxOfMaxPriorityElement++;
+    }
+    Queue->items--;
+    Queue->tail--;
+    return tmp;
+}
+
+
+//для второго задания
 boolean push(T data){
 	if (cursor < SIZE){
 		stack[++cursor] = data;
@@ -106,26 +137,21 @@ void binRec(int n){
 
 int main(){
 	//1 задание
-	init();
-	ins(1, 11);
-	ins(5, 22);
-	ins(3, 33);
-	ins(2, 44);
-	ins(7, 55);
-	ins(2, 66);
-	ins(5, 77);
-	ins(9, 88);
-	ins(1, 99);
-	ins(3, 100);
-	pritnQ();
-	/*for(int i = 0; i < 7; ++i){
-		Node* n = rem();
-		printf("pr=%d, dat=%d \n", n->pr, n->dat);
-	}
-	с удаление исключением я не разобрался, компилятор выдаёт ошибку
-	 "warning: control reaches end of non-void function [-Wreturn-type]
-	pritnQ();*/
-	
+	PriorQueue* NewQueue = (PriorQueue*) malloc(sizeof(PriorQueue));
+	init(NewQueue);
+	ins(NewQueue, 1, 11);
+	ins(NewQueue, 5, 22);
+	ins(NewQueue, 3, 33);
+	ins(NewQueue, 2, 44);
+	ins(NewQueue, 7, 55);
+	ins(NewQueue, 2, 66);
+	ins(NewQueue, 5, 77);
+	ins(NewQueue, 9, 88);
+	ins(NewQueue, 1, 99);
+	ins(NewQueue, 3, 100);
+	pritnQ(NewQueue);
+	Node* RemoveNode1 = removeFromQueue(NewQueue);
+	pritnQ(NewQueue);
 	//2 задание
 	binRec(25);
 	printf("\n");
