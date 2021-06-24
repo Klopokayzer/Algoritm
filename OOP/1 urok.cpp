@@ -1,6 +1,7 @@
 #include <iostream>
 #include <math.h>
 #include <cstdint>
+#include <array>
 
 // Task 1
 class Power
@@ -47,25 +48,43 @@ public:
 class Stack
 {
     private:
-        int stack[10];
-        int key = 0;
+        std::array<int, 10> data;
+        int size = 0;
     public:
+        void reset(){
+            for(int &item:data){
+                item = 0;
+            }
+            size = 0;
+        }
         bool push(int a){
-            if(key <= 9){
-                stack[key] = a;
-                key++;
+            if(size < data.size()){
+                data[size] = a;
+                size++;
                 return true;
             } else {
-                std::cout<<"Stack owerflow!"<<std::endl;
                 return false;
             }
         }
         void print(){
             std::cout<<"( ";
-            for(int i=0;i<=key;i++){
-                std::cout<<stack[i]<<", ";
+            for(int i=0;i<size;i++){
+                if(data[i]!=0){
+                std::cout<<data[i]<<" ";
+                }
             }
             std::cout<<")"<<std::endl;
+        }
+        int pop(){
+            if(size >= 0){
+                int a = data[size];
+                data[size]=0;
+                size--;
+                return a;
+            }else{
+                std::cout<<"Stack is empty!"<<std::endl;
+            }
+            return 0;
         }
 };
 int main()
@@ -93,4 +112,18 @@ int main()
     Stack stack;
     stack.reset();
     stack.print();
+
+    
+    stack.push(3);
+    stack.push(7);
+    stack.push(5);
+    stack.print();
+    
+    stack.pop();
+    stack.print();
+    
+    stack.pop();
+    stack.pop();
+    stack.print();
+    return 0;
 }
