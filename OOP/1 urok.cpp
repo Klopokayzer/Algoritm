@@ -113,7 +113,6 @@ int main()
     stack.reset();
     stack.print();
 
-    
     stack.push(3);
     stack.push(7);
     stack.push(5);
