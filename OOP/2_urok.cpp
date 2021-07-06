@@ -3,12 +3,17 @@
 #include <vector>
 
 // Task 1
+enum class Gender
+{
+    male = 0,
+    famale
+};
 class Person
 {
 private:
     std::string name;
     int age = 0;
-    int gender = 0;
+    Gender gender = Gender::famale;
     int weight = 0;
 
 public:
@@ -20,7 +25,7 @@ public:
     {
         age = value;
     }
-    void set_gender(int value)
+    void set_gender(Gender value)
     {
         gender = value;
     }
@@ -36,7 +41,7 @@ public:
     {
         return age;
     }
-    int get_gender()
+    Gender get_gender()
     {
         return gender;
     }
@@ -46,7 +51,7 @@ public:
     }
 
     Person() = default;
-    Person(std::string name1, int age1 = 0, int gender1 = 0, int weight1 = 0):
+    Person(std::string name1, int age1 = 0, Gender gender1 = Gender::male, int weight1 = 0):
       name{ name1 },
       age{ age1 },
       gender{ gender1 },
@@ -84,7 +89,7 @@ public:
     {
         num = get_count();
     }
-    Student(std::string name, int age, int gender, int weight, int year1):
+    Student(std::string name, int age, Gender gender, int weight, int year1):
       Person(name, age, gender, weight), year{ year1 }
     {
         num = get_count();
@@ -140,8 +145,9 @@ public:
 int main()
 {
     // Task 1
-    std::vector<Student> stud
-        = { { "Ivanov", 24, 1, 65, 2000 }, { "Serov", 34, 1, 80, 2000 }, { "Povidlova", 27, 2, 120, 2000 } };
+    std::vector<Student> stud = { { "Ivanov", 24, Gender::male, 65, 2000 },
+                                  { "Serov", 34, Gender::male, 80, 2000 },
+                                  { "Povidlova", 27, Gender::famale, 120, 2000 } };
     std::cout << "Enter name: ";
     std::string user_name;
     std::cin >> user_name;
@@ -153,7 +159,7 @@ int main()
             match = true;
             std::cout << "name: " << item.get_name() << " "
                       << "age: " << item.get_age() << " "
-                      << "gender: " << item.get_gender() << " "
+                      << "gender: " << static_cast<int>(item.get_gender()) << " "
                       << "weight: " << item.get_weight() << " "
                       << "year: " << item.get_year() << " " << std::endl;
         }
