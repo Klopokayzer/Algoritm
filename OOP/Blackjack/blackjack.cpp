@@ -6,7 +6,7 @@
 #include <random>
 #include "card.hpp"
 #include "gamer.hpp"
-
+int const player_limit = 21;
 using Deck = std::vector<PlayingCard>;
 
 PlayingCard creating_card(std::string name, std::string suit, int score)
@@ -89,7 +89,7 @@ int counting_score(std::vector<PlayingCard> cards)
         }
         score += card.get_score();
     }
-    if (0 < aces_count)
+    if (player_limit < score && 0 < aces_count)
     {
         score -= aces_count * 10;
     }
@@ -116,7 +116,6 @@ void playing_game(Dealer dealer, Gamer player)
     int player_score = 0;
     int dealer_score = 0;
     int const dealer_limit = 17;
-    int const player_limit = 21;
     std::string user_answer;
     std::string const playing_next = "y";
     std::string const playing_exit = "n";
