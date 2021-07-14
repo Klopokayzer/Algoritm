@@ -44,7 +44,7 @@ public:
 
 class GenericPlayer: public Hand
 {
-private:
+protected:
     std::string name;
 
 public:
@@ -60,5 +60,6 @@ public:
             std::cout << name << ": is busted!" << std::endl;
         }
     }
+    friend std::ostream &operator<<(std::ostream &os, const GenericPlayer &value){};
 };
 #endif
