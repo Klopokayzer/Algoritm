@@ -1,6 +1,6 @@
 .DEFAULT_GOAL := run
 build: 
-	g++ -o 6_urok -std=c++17 6_urok.cpp
+	g++ -o 7_urok -std=c++17 7_urok.cpp
 
 run: build
-	./6_urok.exe
+	./7_urok.exe
