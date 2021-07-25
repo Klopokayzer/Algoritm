@@ -5,8 +5,8 @@
 
 enum class Rank
 {
-    ACE = 11,
-    TWO = 2,
+    ACE = 1,
+    TWO,
     THREE,
     FOUR,
     FIVE,
@@ -14,10 +14,11 @@ enum class Rank
     SEVEN,
     EIGHT,
     NINE,
-    TEN = 10'000,
+    TEN,
     JACK,
     QUEEN,
-    KING
+    KING,
+    LAST
 };
 
 inline std::string to_string(Rank value)
@@ -51,7 +52,8 @@ enum class Suit
     CLUBS,
     DIAMONDS,
     HEARTS,
-    SPADES
+    SPADES,
+    LAST
 };
 
 inline std::string to_string(Suit value)
@@ -79,14 +81,20 @@ private:
     bool card_flipped = true;
 
 public:
+    Card() = default;
+    Card(Suit s, Rank r): suit_card{ s }, rank{ r } {}
     bool flip()
     {
-        return card_flipped == true ? true : card_flipped = true;
+        return card_flipped = !card_flipped;
     }
     int get_value() const
     {
+        if (is_ace())
+        {
+            return 11;
+        }
         int const temp = static_cast<int>(rank);
-        return temp >= 10'000 ? 10 : temp;
+        return temp > 10 ? 10 : temp;
     }
     bool is_ace() const
     {
@@ -94,7 +102,7 @@ public:
     }
     friend std::ostream &operator<<(std::ostream &os, const Card &value)
     {
-        if (value.card_flipped == true)
+        if (value.card_flipped == false)
         {
             os << "XX" << std::endl;
         }

@@ -4,15 +4,28 @@
 #include <string>
 #include <vector>
 #include <cassert>
+#include <cctype>
+#include <algorithm>
+#include <random>
 #include "card.hpp"
 int const limit_score = 21;
+int const limit_house_score = 16;
 class Hand
 {
-private:
-    std::vector<Card const *> deck;
+protected:
+    std::vector<Card *> deck;
 
 public:
-    void add(Card const *value)
+    Hand() = default;
+    virtual ~Hand();
+    void print_to(std::ostream &os) const
+    {
+        for (Card *card : deck)
+        {
+            os << *card << " ";
+        }
+    }
+    void add(Card *value)
     {
         assert(nullptr != value && "Card::add");
         deck.push_back(value);
@@ -40,26 +53,5 @@ public:
         }
         return score;
     }
-};
-
-class GenericPlayer: public Hand
-{
-protected:
-    std::string name;
-
-public:
-    virtual bool is_hitting() = 0;
-    bool is_busted() const
-    {
-        return Hand::getValue() > limit_score;
-    }
-    void bust() const
-    {
-        if (is_busted())
-        {
-            std::cout << name << ": is busted!" << std::endl;
-        }
-    }
-    friend std::ostream &operator<<(std::ostream &os, const GenericPlayer &value){};
 };
 #endif

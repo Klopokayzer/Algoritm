@@ -7,6 +7,8 @@
 #include "card.hpp"
 #include "gamer.hpp"
 int const player_limit = 21;
+char ans;
+bool is_playing = true;
 using Deck = std::vector<PlayingCard>;
 
 PlayingCard creating_card(std::string name, std::string suit, int score)
@@ -95,6 +97,15 @@ int counting_score(std::vector<PlayingCard> cards)
     }
     return score;
 }
+void cont()
+{
+    std::cout << "Continue? Enter 'y' or 'n'." << std::endl;
+    std::cin >> ans;
+    if (ans == 'n')
+    {
+        is_playing = false;
+    }
+}
 
 PlayingCard get_last_card(Deck &deck)
 {
@@ -111,7 +122,6 @@ PlayingCard get_last_card(Deck &deck)
 void playing_game(Dealer dealer, Gamer player)
 {
     Deck deck;
-    bool is_playing = true;
     bool hod = true;
     int player_score = 0;
     int dealer_score = 0;
@@ -119,7 +129,7 @@ void playing_game(Dealer dealer, Gamer player)
     std::string user_answer;
     std::string const playing_next = "y";
     std::string const playing_exit = "n";
-    while (is_playing == true)
+    do
     {
         if (player.get_money() <= 0)
         {
@@ -171,6 +181,7 @@ void playing_game(Dealer dealer, Gamer player)
             dealer.clear();
             player.clear();
             std::cout << "You lost!" << std::endl << std::endl;
+            cont();
             continue;
         }
         if (playing_exit == user_answer)
@@ -197,6 +208,7 @@ void playing_game(Dealer dealer, Gamer player)
                 dealer_score = 0;
                 dealer.clear();
                 player.clear();
+                cont();
                 continue;
             }
             if (dealer_score == player_score)
@@ -206,6 +218,7 @@ void playing_game(Dealer dealer, Gamer player)
                 dealer_score = 0;
                 dealer.clear();
                 player.clear();
+                cont();
                 continue;
             }
             if (dealer_score > player_score)
@@ -215,19 +228,11 @@ void playing_game(Dealer dealer, Gamer player)
                 dealer_score = 0;
                 dealer.clear();
                 player.clear();
-                continue;
-            }
-            else
-            {
-                std::cout << "You win!" << std::endl << std::endl;
-                player_score = 0;
-                dealer_score = 0;
-                dealer.clear();
-                player.clear();
+                cont();
                 continue;
             }
         }
-    }
+    } while (is_playing == true);
 }
 
 int main()
